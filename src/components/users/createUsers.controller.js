@@ -12,7 +12,7 @@ const createUsers = async (req, res) => {
         try {
 
             const verifyUser = await Users.findOne({email: email})
-            console.log(verifyUser,'vvvv')
+            
             if(verifyUser) return res.status(400).json({message: 'El usuario ya existe en el sistema'});
 
             let passEncrypt = await encryptPass(password);
@@ -21,11 +21,12 @@ const createUsers = async (req, res) => {
                 name,
                 email, 
                 password: passEncrypt,
+                token: '',
                 active: false
             })
 
             const result = await user.save();
-            console.log(result)
+           
             if(result) return res.status(201).json({message: 'Usuario creado!!'});
             
 

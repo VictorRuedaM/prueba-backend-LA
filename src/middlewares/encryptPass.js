@@ -18,7 +18,7 @@ const encryptPass = async (password) => {
 
 
 const comparePass = async (dbPassword, userPassword) => {
-    console.log('TTTTTTT', dbPassword, userPassword)
+    
     try {
         const result = await bcrypt.compare(userPassword, dbPassword);
 

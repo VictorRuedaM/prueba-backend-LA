@@ -20,22 +20,32 @@ const getAuthorization = async (req, res) => {
             if(verifyUser){
 
                 const verifyPass = await comparePass(dbPassword , password)
-                console.log('comparepass', verifyPass)
+                
                 if(verifyPass){
 
-                    const data = {
-                        id: verifyUser._id,
-                        email: verifyUser.email
-                    }
-                    
-                    const token = await createToken(data);
-                    console.log('elobj', token)
-                    if(token){
-                        res.status(200).json({message: 'Acceso concedido!!', token})
+                    // const existTocken = 
+                    if(!verifyUser.token){
+                        const data = {
+                            id: verifyUser._id,
+                            email: verifyUser.email
+                        }
+                        
+                        const token = await createToken(data);
 
-                    }else{
-                        return res.status(500).json({message: 'Error interno'})
+                        const tokenDB = await Users.findByIdAndUpdate(verifyUser._id, {token}, {new: true})
+                        console.log('El token auth', tokenDB)
+                        
+                        if(token){
+                            return res.status(200).json({message: 'Acceso concedido!!', token})
+    
+                        }else{
+                            return res.status(500).json({message: 'Error interno'})
+                        }
                     }
+
+
+                    return res.status(200).json({message: 'Acceso concedido!!'})
+                    
                     
                 }else{
                     return res.status(400).json({message: 'Autorización denegada'})
