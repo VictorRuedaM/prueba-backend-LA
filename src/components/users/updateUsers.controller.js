@@ -1,4 +1,5 @@
 const Users = require('../../models/user.model');
+const {encryptPass} = require('../../middlewares/encryptPass');
 
 const updateUsers = async (req, res) => {
 
@@ -9,7 +10,9 @@ const updateUsers = async (req, res) => {
 
         try {
             
-            const data = await Users.findByIdAndUpdate(userId, {name, email, password}, {new: true})
+            let passEncrypt = await encryptPass(password);
+
+            const data = await Users.findByIdAndUpdate(userId, {name, email, password: passEncrypt}, {new: true})
             
             if(data) return res.status(201).json({message: 'Ususario actualizado!!', data});
             else return res.status(400).json({message: 'Usuario no encotrado'})

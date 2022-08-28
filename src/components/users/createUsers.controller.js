@@ -1,4 +1,6 @@
 const Users = require('../../models/user.model');
+const {encryptPass} = require('../../middlewares/encryptPass');
+const { emit } = require('../../models/user.model');
 
 const createUsers = async (req, res) => {
 
@@ -6,19 +8,26 @@ const createUsers = async (req, res) => {
 
     if(name && email && password){
 
+        
         try {
+
+            const verifyUser = await Users.findOne({email: email})
+            console.log(verifyUser,'vvvv')
+            if(verifyUser) return res.status(400).json({message: 'El usuario ya existe en el sistema'});
+
+            let passEncrypt = await encryptPass(password);
 
             const user = new Users({
                 name,
                 email, 
-                password,
+                password: passEncrypt,
                 active: false
             })
 
             const result = await user.save();
-
+            console.log(result)
             if(result) return res.status(201).json({message: 'Usuario creado!!'});
-           
+            
 
 
         
