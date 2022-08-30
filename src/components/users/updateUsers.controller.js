@@ -15,14 +15,14 @@ const updateUsers = async (req, res) => {
             const data = await Users.findByIdAndUpdate(userId, {name, email, password: passEncrypt}, {new: true})
             
             if(data) return res.status(201).json({message: 'Ususario actualizado!!', data});
-            else return res.status(400).json({message: 'Usuario no encotrado'})
+            else return res.status(404).json({message: 'Usuario no encotrado'})
 
         } catch (error) {
             console.log(`Error updateUser --> ${error}`);   
             return res.status(500).json({message:'Error no se pudo actualizar el usuario!!'});
         }
     }else{
-        res.status(500).send('Error debe enviar todos los datos')
+        res.status(400).send('Error debe enviar todos los datos')
     }
 
     

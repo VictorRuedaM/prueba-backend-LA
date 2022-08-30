@@ -8,11 +8,15 @@ const removeAuth = async (req, res) => {
 
     try {
         if(email){
-
-            const deleteToken = await Users.findOneAndUpdate(email, {token: ''}, {new: true});
+            const verify = await Users.findOne({email})
+            console.log('iiiiiiiiii',verify)
+            if(verify){
+                const deleteToken = await Users.findOneAndUpdate(email, {token: ''}, {new: true});
             
-            if(deleteToken) return res.status(200).json({message: 'Se ha cerrado sessión!!'});
-            else res.status(400).json({message: 'Error interno'})
+                if(deleteToken) return res.status(200).json({message: 'Se ha cerrado sessión!!'});
+                else res.status(400).json({message: 'Error interno'});
+                
+            }else res.status(400).json({message: 'Error interno'})
     
             
         }

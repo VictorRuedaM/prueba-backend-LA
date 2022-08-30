@@ -15,23 +15,42 @@ const sendMessage = async (req, res) => {
         if(verifyId){
             const datos = await axios.get('https://catfact.ninja/docs');
             
-    
+            
             const dato = {
                 mensaje: datos.data,
                 id
             }
     
             const client  = mqtt.connect('mqtt://test.mosquitto.org' )
+            //  mqtt://mqtt.lyaelectronic.com:1883
+            console.log('>>>>>>>>>> aqui llego ')
+
+            client.on('connect', () => {
+
+                client.subscribe('lyatest/[código_prueba]')
+                
+            })
             // console.log('first', client)
-            const u = client.on('connect', () => {
+            client.on('connect', () => {
     
-                client.publish('presence', JSON.stringify(dato))
-    
+                client.publish('lyatest/[código_prueba]', JSON.stringify(dato))
+                console.log('>>>>>>>>>>')
+            })
+
+            
+
+            client.on('message', (topic, message) => {
+
+                console.log('elmensaje', message.toString())
+                client.end()
             })
         
-            eventMessage()
+        
+            
     
             return res.status(200).json({message: 'Mensaje enviado!!'})
+        }else{
+            return res.status(400).json({message: 'No se pudo enviar el mensaje'})
         }
     } catch (error) {
         console.log(`Error sendMessage --> ${error}`);
@@ -42,26 +61,7 @@ const sendMessage = async (req, res) => {
 
 }
 
-const eventMessage = () => {
 
-    const client  = mqtt.connect(' mqtt://test.mosquitto.org' )
-
-    client.on('connect', () => {
-
-        client.subscribe('presence')
-        
-    })
-
-    client.on('message', (topic, message) => {
-
-        console.log(message.toString())
-        client.end()
-    })
-    
-    
-    
-        
-}
 
 
 

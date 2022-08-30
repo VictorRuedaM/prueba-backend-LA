@@ -5,11 +5,13 @@ const userSchema = new Schema({
 
     name: {
         type: String,
-        unique: false
+        unique: false,
+        required: true
     },
     email: {
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
     password: {
         type: String,
@@ -17,7 +19,7 @@ const userSchema = new Schema({
     },
     token: {
         type: String,
-        unique: true
+        
     },
     active: Boolean
 
