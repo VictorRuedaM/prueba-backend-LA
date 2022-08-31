@@ -1,7 +1,10 @@
 const { default: axios } = require('axios');
 const Users = require('../../models/user.model');
-const mqtt = require('mqtt')
+const mqtt = require('mqtt');
+require('dotenv').config();
 
+
+const {URL_DATOS} = process.env;
 // Controlado sendMessage que envia un mensaje por MQTT con el ID del usuario que recibe por body
 // y un mensaje que viene de [https://catfact.ninja/docs] datos curiosos, ademas permite leer el mensaje 
 // que se envio para confimar que fue publicado en el servidor
@@ -10,13 +13,13 @@ const sendMessage = async (req, res) => {
    const {id} = req.body;
     // Se verifica que viene el ID
    if(id){
-
+    
     try {
         // Se confirma que el Id existe en la DB
         const verifyId = await Users.findById(id)
         if(verifyId){
             // Mediante axios se traen los datos curisos de la url 
-            const datos = await axios.get('https://catfact.ninja/docs');
+            const datos = await axios.get(`${URL_DATOS}`);
             
             // Se crea un objecto con el mensaje los datos curiosos y el Id del usuario
             const dato = {
