@@ -1,6 +1,7 @@
 const {Router} = require('express');
 const getAuthorization = require('./getAuthorization.controller');
 const removeAuth = require('./removeAuth.controller');
+// veriryToken función que valida en token enviado y da acceso a la ruta o lo niega
 const verifyToken = require('../../middlewares/verifyToken');
 
 
@@ -81,7 +82,7 @@ router.post('/', getAuthorization);
  *          500:
  *              description: message Error al cerrar sessión
  */
-router.put('/', removeAuth);
+router.put('/',verifyToken, removeAuth);
 
 
 

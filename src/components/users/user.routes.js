@@ -1,5 +1,7 @@
 const {Router} = require('express');
 
+// veriryToken función que valida en token enviado y da acceso a la ruta o lo niega
+const verifyToken = require('../../middlewares/verifyToken');
 const createUsers = require('./createUsers.controller');
 const getUser = require('./getUser.controller');
 const updateUsers = require('./updateUsers.controller');
@@ -91,7 +93,7 @@ router.post('/', createUsers);
  *          
  *          
  */
-router.get('/:id', getUser);
+router.get('/:id',verifyToken, getUser);//Se valida el token con verifyToken
 
 
 
@@ -154,7 +156,7 @@ router.get('/:id', getUser);
  *              description: message Error no se pudo actualizar el usuario
  */
 
-router.put('/:id', updateUsers);
+router.put('/:id',verifyToken, updateUsers);
 
 
 /**
@@ -180,7 +182,7 @@ router.put('/:id', updateUsers);
  *          
  */
 
-router.delete('/:id', deleteUsers);
+router.delete('/:id',verifyToken, deleteUsers);
 
 
 
@@ -225,7 +227,7 @@ router.delete('/:id', deleteUsers);
  *          
  */
 
-router.patch('/:id/active', userActivation);
+router.patch('/:id/active',verifyToken, userActivation);
 
 
 

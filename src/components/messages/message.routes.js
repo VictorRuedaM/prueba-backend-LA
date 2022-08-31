@@ -1,6 +1,9 @@
 const {Router} = require('express');
 const sendMessage = require('./mqtt.controller');
 
+// veriryToken función que valida en token enviado y da acceso a la ruta o lo niega
+const verifyToken = require('../../middlewares/verifyToken');
+
 const router = Router();
 
 /**
@@ -36,7 +39,7 @@ const router = Router();
  *              description: message Error interno
  */
 
-router.post('/', sendMessage)
+router.post('/',verifyToken, sendMessage)
 
 
 
